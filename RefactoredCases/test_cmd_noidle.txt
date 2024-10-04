@@ -1,0 +1,11 @@
+async def test_cmd_noidle(self):
+    with self.run_bpd() as client:
+        # Manually send a command without reading a response.
+        request = client.serialise_command("idle")
+        client.sock.sendall(request)
+
+        # Use asyncio.sleep to yield control and allow other tasks to run, which might be necessary for the test environment setup.
+        await asyncio.sleep(0.01)  # Reduced sleep time and switched to asyncio.sleep
+
+        response = client.send_command("noidle")
+        self._assert_ok(response)

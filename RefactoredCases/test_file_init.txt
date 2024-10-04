@@ -1,0 +1,12 @@
+def test_file_init():
+    """Test class Extension in __init__."""
+    is_mopidy_file_loaded = False
+    for extension_data in ext.load_extensions():
+        extension = extension_data.extension
+        if isinstance(extension, Extension) and extension.dist_name == "Mopidy-File":
+            registry = ext.Registry()
+            extension.setup(registry)
+            is_mopidy_file_loaded = registry["backend"][0] == FileBackend
+            break  # Stop iterating once we've found and tested Mopidy-File
+
+    assert is_mopidy_file_loaded, "Mopidy-File not loaded!"

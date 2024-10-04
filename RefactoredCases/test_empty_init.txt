@@ -1,0 +1,3 @@
+class TestAnsibleVaultEncryptedUnicodeInitialization(unittest.TestCase):
+    def test_empty_init(self):
+        self.assertRaises(TypeError, objects.AnsibleVaultEncryptedUnicode)

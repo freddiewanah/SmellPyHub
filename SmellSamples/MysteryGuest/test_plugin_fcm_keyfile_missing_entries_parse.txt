@@ -1,0 +1,38 @@
+@pytest.mark.skipif(
+    'cryptography' not in sys.modules, reason="Requires cryptography")
+def test_plugin_fcm_keyfile_missing_entries_parse(tmpdir):
+    """
+    NotifyFCM() KeyFile Missing Entries Test
+    """
+
+    # Prepare a base keyfile reference to use
+    path = os.path.join(PRIVATE_KEYFILE_DIR, 'service_account.json')
+    with open(path, mode="r", encoding='utf-8') as fp:
+        content = json.loads(fp.read())
+
+    path = tmpdir.join('fcm_keyfile.json')
+
+    # Test that we fail to load if the following keys are missing:
+    for entry in (
+            'client_email', 'private_key_id', 'private_key', 'type',
+            'project_id'):
+
+        # Ensure the key actually exists in our file
+        assert entry in content
+
+        # Create a copy of our content
+        content_copy = content.copy()
+
+        # Remove our entry we expect to validate against
+        del content_copy[entry]
+        assert entry not in content_copy
+
+        path.write(json.dumps(content_copy))
+
+        oauth = GoogleOAuth()
+        assert oauth.load(str(path)) is False
+
+    # Now write ourselves a bad JSON file
+    path.write('{')
+    oauth = GoogleOAuth()
+    assert oauth.load(str(path)) is False

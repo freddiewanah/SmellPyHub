@@ -1,0 +1,9 @@
+def test_scalar_help_text(styling_context):
+    rendered = render(scalar_help_text("max-width", styling_context))
+    assert "Invalid value for" in rendered
+
+    # Ensure property name is contextualised to inline/css styling
+    if styling_context == "css":
+        assert "max-width" in rendered
+    elif styling_context == "inline":
+        assert "max_width" in rendered

@@ -1,0 +1,7 @@
+vhs-teletext
+test_training.py ::: TrainingTestCase
+test_mp.py ::: TestMPMultiSigInt
+test_elements.py ::: TestFastext
+
+
+

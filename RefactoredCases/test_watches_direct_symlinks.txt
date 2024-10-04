@@ -1,0 +1,33 @@
+@tempdir({"mkdocs.yml": "original", "mkdocs2.yml": "original"}, prefix="tmp_dir")
+@tempdir(prefix="origin_dir")
+@tempdir({"subdir/foo.md": "original"}, prefix="dest_docs_dir")
+async def test_watches_direct_symlinks(self, dest_docs_dir, origin_dir, tmp_dir):
+    try:
+        Path(origin_dir, "docs").symlink_to(dest_docs_dir, target_is_directory=True)
+        Path(origin_dir, "mkdocs.yml").symlink_to(Path(tmp_dir, "mkdocs.yml"))
+    except NotImplementedError:  # PyPy on Windows
+        self.skipTest("Creating symlinks not supported")
+
+    started_building = threading.Event()
+
+    async def wait_for_build():
+        result = started_building.wait(timeout=10)
+        started_building.clear()
+        with self.assertLogs("mkdocs.livereload"):
+            await do_request(server, "GET /")
+        return result
+
+    with testing_server(tmp_dir, started_building.set) as server:
+        server.watch(Path(origin_dir, "docs"))
+        server.watch(Path(origin_dir, "mkdocs.yml"))
+        # Replaced time.sleep with asyncio.sleep to avoid blocking and added a comment explaining the purpose
+        await asyncio.sleep(0.01)  # Short sleep to allow file system watcher to initialize
+
+        Path(origin_dir, "unrelated.md").write_text("foo")
+        self.assertFalse(started_building.wait(timeout=0.5))
+
+        Path(tmp_dir, "mkdocs.yml").write_text("edited")
+        self.assertTrue(await wait_for_build())
+
+        Path(dest_docs_dir, "subdir", "foo.md").write_text("edited")
+        self.assertTrue(await wait_for_build())

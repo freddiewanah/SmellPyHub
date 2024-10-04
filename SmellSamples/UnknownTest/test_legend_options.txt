@@ -1,0 +1,11 @@
+    def test_legend_options(self):
+
+        g = ag.FacetGrid(self.df, hue="b")
+        g.map(plt.plot, "x", "y")
+        g.add_legend()
+
+        g1 = ag.FacetGrid(self.df, hue="b", legend_out=False)
+        g1.add_legend(adjust_subtitles=True)
+
+        g1 = ag.FacetGrid(self.df, hue="b", legend_out=False)
+        g1.add_legend(adjust_subtitles=False)

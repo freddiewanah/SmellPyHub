@@ -1,0 +1,6 @@
+{
+  "ExceptionHandling": {
+    "Definition": "A test case contains either the try/except statement or the raise statement.",
+    "Steps": "1. Understand the purpose of the exception handling: Is it to verify that a certain method of the system under test raises an exception, or is it being used to catch and ignore exceptions? 2. Use appropriate assertion for exception checking: If the exception handling is being used to verify that a certain method of the system under test raises an exception, consider using an appropriate assertion for this, such as 'assertRaises' in Python's unittest framework or 'pytest.raises'. If simply raise an exception, check if the raised exception can be replaced by other assert statements. 3. Remove unnecessary exception handling: If the exception handling is being used to catch and ignore exceptions, consider removing it. If a method of the system under test throws an exception, the test should fail, not catch and ignore the exception."
+  }
+}

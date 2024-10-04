@@ -1,0 +1,14 @@
+    def test_legend_options(self):
+
+        g = ag.FacetGrid(self.df, hue="b")
+        g.map(plt.plot, "x", "y")
+        g.add_legend()
+        assert g is not None
+
+        g1 = ag.FacetGrid(self.df, hue="b", legend_out=False)
+        g1.add_legend(adjust_subtitles=True)
+        assert g1 is not None
+
+        g2 = ag.FacetGrid(self.df, hue="b", legend_out=False)
+        g2.add_legend(adjust_subtitles=False)
+        assert g2 is not None

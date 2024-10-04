@@ -1,0 +1,100 @@
+{
+  "AssertRoulette": {
+    "Definition": "A test case contains more than one assertion statement without an explanation/message.",
+    "Steps": "1. Understand the purpose of each assertion: For each assertion, understand what part of the functionality it is testing. 2. Group assertions by functionality: Group assertions that test the same functionality. 3. Add an explanation/message to each assertion: For each assertion, add an explanation/message that describes what part of the functionality it is testing. "
+  },
+  "ConditionTestLogic": {
+    "Definition": "A test case contains one or more control statements (i.e., if, for, while).",
+    "Steps": "1. IF statement: If the conditional is an IF statement, consider splitting the test case into two separate tests, each handling a single scenario by @pytest.mark.skipif. 2. FOR LOOP: If the condition is a FOR loop, try to avoid using the for loop. If you can't avoid the for loop, create the loop parameter in the setup function or extract the loop component to a new test method and DON'T forget to add an explanation/message to the assert statement within the for loop that describes which iteration failed. 3. WHILE statement: If the condition is a while, consider splitting the test case into two separate tests, each handling a single scenario."
+  },
+  "ConstructorInitialization": {
+    "Definition": "A test suite contains a constructor declaration (an __init__ method).",
+    "Steps": "1. Understand the purpose of the constructor: Understand why the constructor is being used in the test class. Is it setting up state or dependencies that are used by the test methods? 3. Replace constructor with setup method: If possible, replace the constructor with a setup method (such as setUp in unittest) that is clearly identified as setting up the state for each test. This makes it clear where setup code is and ensures that setup code is run before each test, not just when the test class is instantiated."
+  },
+  "DefaultTest": {
+   "Definition": "A test suite is called MyTestCase.",
+    "Steps": "1. Understand the purpose of the test suite: For each test suite named 'MyTestCase', understand what functionality or behavior it is testing. 3. Rename the test suite: Rename each 'MyTestCase' test suite with a name that clearly indicates what it is testing."
+
+  },
+  "DuplicateAssert": {
+    "Definition": "A test case contains more than one assertion statement with the same parameters.",
+    "Steps": "1. Understand the purpose of each assertion: For each assertion, understand what part of the functionality it is testing. 2. Group assertions by functionality: Group assertions that have the same parameters. 3. Remove duplicate assertions: If two or more assertions are testing the same functionality, remove all but one of them. 4. Extract the assertions or parameterize functions: If the assertions are testing the same functionality, but different conditions, extract the assertions into a internal method or parameterize the functions with subTest or @pytest.mark.parametrize."
+  },
+  "EagerTest": {
+    "Definition": "A test method that tests more than one method in one test method.",
+     "Steps": "1. Break down the test method:Break down your test method into smaller methods, each testing a single method of the system under test. Name each new test method in a way that clearly indicates the functionality or behavior it is testing. 2. Refactor: Move the appropriate setup, execution, and verification code to each new test method."
+  },
+  "EmptyTest": {
+    "Definition": "A test case does not contain a single executable statement.",
+    "Steps": "1. Comment out the test case: Directly use # to comment out the test case that does not contain a single executable statement, e.g., the functions that only have a pass."
+  },
+  "ExceptionHandling": {
+    "Definition": "A test case contains either the try/except statement or the raise statement.",
+    "Steps": "1. Understand the purpose of the exception handling: Is it to verify that a certain method of the system under test raises an exception, or is it being used to catch and ignore exceptions? 2. Use appropriate assertion for exception checking: If the exception handling is being used to verify that a certain method of the system under test raises an exception, consider using an appropriate assertion for this, such as 'assertRaises' in Python's unittest framework or 'pytest.raises'. If simply raise an exception, check if the raised exception can be replaced by other assert statements. 3. Remove unnecessary exception handling: If the exception handling is being used to catch and ignore exceptions, consider removing it. If a method of the system under test throws an exception, the test should fail, not catch and ignore the exception."
+
+  },
+  "GeneralFixture": {
+    "Definition": "Not all fields instantiated within the setUp() method of a test suite are utilized by all test cases in this test suite.",
+    "Steps": "1. Understand the purpose of having the method that is in setUp() but not used by the test cases. 2. Comment out the untested parameters in the setUp(). 3. If the parameters are partly used in different test cases, split the test class into two or more where each test class only use the setup parameters within its own test methods."
+  },
+  "IgnoredTest": {
+    "Definition": "A test case contains the @unittest.skip or @pytest.mark.skip decorator.",
+    "Steps": "1. Address valid reasons for skipping: If a test is being skipped for a valid reason, consider to add a comment to the test case that explains why it is being skipped, and comment out the entire ignored test case during testing. 2. Comment ALL  code block: If the test should remain skipped and there's no immediate plan to enable it, you MUST add # in front of each line of the code including the annotation and function def to remove the entire code block during the testing, comment out the ENTIRE test body to make it clear that it's intentionally inactive."
+  },
+  "MagicNumber": {
+    "Definition": "A test case contains an assertion statement that contains a numeric literal as an argument.",
+    "Steps": "1. Understand the purpose of the number: For each assert statement that contains a numeric literal, understand why the specific numeric value is being used. What does it represent and why is it the expected value? 3. Replace magic numbers in the assert statement with named constants: Replace each magic number with a named constant that clearly indicates what the number represents. Define the constants at the beginning of your test file or in a setup method."
+
+  },
+  "MysteryGuest": {
+    "Definition": "A test method containing object instances of files and databases classes",
+    "Steps": "1. Replace external resources with mocks or stubs: If possible, replace the external resource with a mock or stub. This makes the test more self-contained and predictable, as it no longer depends on the state of the external resource. 2. Isolate the test from the external resource: If it's not possible to replace the external resource, isolate the test from changes in the resource. For example, if the test reads from a file, ensure the file is reset to a known state before each test."
+
+  },
+  "NoClass": {
+    "Definition": "A test suite does not contain a class declaration.",
+    "Steps": "1. Understand the functionality being tested: For each such test suite, understand what functionality it is testing. 2. Create a test class: Create a new test class for the test suite. The name of the test class should clearly indicate the functionality it is testing. 3. Move test methods to the new class: Move each test method in the test suite into the new test class. Be sure to adjust the method declarations as needed to fit within the class. 4. Extract the similar functionality from the test methods: For each group of test methods that test the same functionality, extract the functionality into a separate setup method. 5. Make the sure the test methods works the same."
+  },
+  "ObscureInLineSetup": {
+    "Definition": "A test case contains ten or more local variables declarations.",
+    "Steps": "1. Understand the purpose of each variable: For each variable, understand what part of the functionality it is testing. 2. Group variables by functionality: Group variables that test the same functionality. 3. Extract functionality into a separate test case: For each group of variables, extract to separated methods. Or breakdown the test case into several small test cases."
+  },
+  "RedundantAssertion": {
+    "Definition": "A test case contains an assertion statement in which (1) the expected and actual parameters of equality are the same, e.g., assertEqual(X, X) or (2) the assertion of truth is carried out on the unchangeable object, e.g., assertTrue(True).",
+    "Steps": "1. Remove the assertion: If the assertion is not needed, remove it. 2. Replace the assertion: If the assertion is needed,  replace it with an assertion that tests the functionality it is supposed to test."
+  },
+  "RedundantPrint": {
+    "Definition": "A test case contains a print statement.",
+    "Steps": "1. Replace the print statement with an assertion: Replace each print statement with an assertion that tests the functionality it is supposed to test. 2. Remove the print statement: If the print statement is not needed, remove it."
+  },
+  "ResourceOptimism": {
+    "Definition": "A test method utilizes an instance of a File class without calling the exists(), isFile() or notExists() methods of the object",
+    "Steps": "1. Add assertions: Add assertions to the test method that verify the existence or non-existence of the file."
+  },
+  "SleepyTest": {
+    "Definition": "A test case invokes the time.sleep() function with no comment.",
+    "Steps": "1. Understand the purpose of the sleep: For each such test method, understand why the sleep is being used. 2. Replace the sleep with a asyncio.sleep: If the sleep is being used to wait for a certain condition, consider replacing it with asyncio.sleep. 3. Reduce the sleep duration: reduce the sleep duration by decrease the sleep time. 4. Add a comment: If the sleep is being used to wait for a certain condition, add a comment to the test case that explains what condition is being waited for and why."
+
+  },
+  "SuboptimalAssert": {
+    "Definition": "A test case contains an assertion statement that contains assertions that can be replaced with more specific assertions, such as use assertTrue(a==b) instead of assertEqual(a,b) or use assertTrue(a>b) instead of assertGreater(a,b).",
+    "Steps": "1. Replace the assertion with a more specific assertion: Replace each assertion with a more specific assertion that clearly indicates what the assertion is testing. For example, if using unittest library replace assertEqual(a,b) with assertTrue(a==b) or assertGreater(a,b) with assertTrue(a>b). If it's pytest then refactor the redundant part such as is True or is False"
+  },
+  "TestMaverick": {
+    "Definition": "A test suite contains at least one test case that does not use a single field from the SetUp() method.",
+    "Steps": "1. Understand the purpose of the test case: For each such test case, understand what functionality it is testing and why it does not use any fields from the setUp() method. 2. Modify the test case or setUp method: If the test case should be using fields from the setUp method, modify it to do so. If the test case is correctly not using the setUp method because it needs different setup conditions, consider extracting it to a different test suite or modifying the setUp method to accommodate it."
+  },
+  "UnknownTest": {
+    "Definition": "A test case does not contain a single assertion statement.",
+    "Steps": "1. Understand the purpose of the test method: For each such test method, understand what it is intended to test. 2. Add appropriate assertions: Add assertions to the test methods. ONLY add assertTrue/assert or assertFalse/assert not or assertIsNone/assert xxx is None to the existing functions in the test method. DO NOT assert new function calls as you don't know their type and definition. 3. Ignore the test method: If the test method is not needed at this time, consider adding the @unittest.skip or @pytest.mark.skip decorator to it."
+
+  },
+  "ParameterisableRedundancy": {
+    "Definition": "Multiple test cases within a test suite that share a nearly identical structure.",
+    "Steps": "1. Understand the purpose of the test cases: For each group of test cases that share a nearly identical structure, understand what functionality or behavior they are testing. 2. Merge the methods: Merge the similar methods into one method or class. 3. Parameterize the test cases: Parameterize the test cases with @pytest.mark.parameterize or parameterized for unittest. "
+  },
+  "AssertinFixture":{
+    "Definition": "A test suite contains an assertion statement in its @pytest.fixture or setUp() method.",
+    "Steps": "1. Understand the purpose of the assertion: For each assertion in the fixture or setUp() method, understand why it is there. 2. Move the assertion to the test method: Create a new test method named test_setup and move the assertion to this method. 3. Remove the assertion:Remove the assertion in the fixture or setUp() method."
+  }
+}

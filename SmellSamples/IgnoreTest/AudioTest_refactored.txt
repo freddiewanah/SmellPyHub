@@ -1,0 +1,55 @@
+class AudioTest(BaseTest):
+    def test_start_playback_existing_file(self):
+        self.audio.prepare_change()
+        self.audio.set_uri(self.uris[0])
+        assert self.audio.start_playback().get()
+
+    def test_start_playback_non_existing_file(self):
+        self.possibly_trigger_fake_playback_error(self.uris[0] + "bogus")
+
+        self.audio.prepare_change()
+        self.audio.set_uri(self.uris[0] + "bogus")
+        assert not self.audio.start_playback().get()
+
+    def test_pause_playback_while_playing(self):
+        self.audio.prepare_change()
+        self.audio.set_uri(self.uris[0])
+        self.audio.start_playback()
+        assert self.audio.pause_playplayback().get()
+
+    def test_stop_playback_while_playing(self):
+        self.audio.prepare_change()
+        self.audio.set_uri(self.uris[0])
+        self.audio.start_playback()
+        assert self.audio.stop_playback().get()
+
+    # Skipping this test as it is not yet implemented
+    # @unittest.SkipTest
+    # def test_deliver_data(self):
+    #     pass  # TODO
+
+    # Skipping this test as it is not yet implemented
+    # @unittest.SkipTest
+    # def test_end_of_data_stream(self):
+    #     pass  # TODO
+
+    # Skipping this test as it is not yet implemented
+    # Probably needs a fakemixer with a mixer track
+    # @unittest.SkipTest
+    # def test_set_mute(self):
+    #     pass  # TODO Probably needs a fakemixer with a mixer track
+
+    # Skipping this test as it is not yet implemented
+    # @unittest.SkipTest
+    # def test_set_state_encapsulation(self):
+    #     pass  # TODO
+
+    # Skipping this test as it is not yet implemented
+    # @unittest.SkipTest
+    # def test_set_position(self):
+    #     pass  # TODO
+
+    # Skipping this test as it is not yet implemented
+    # @unittest.SkipTest
+    # def test_invalid_output_raises_error(self):
+    #     pass  # TODO

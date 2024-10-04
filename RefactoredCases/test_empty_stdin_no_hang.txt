@@ -1,0 +1,14 @@
+    def test_empty_stdin_no_hangg(self):
+        inputs = ["", None]
+
+        for input_data in inputs:
+            with self.subTest(input_data=input_data):
+                py = create_tmp_test(
+                    """
+import sys
+data = sys.stdin.read()
+sys.stdout.write("no hang")
+"""
+             )
+                out = pythons(py.name, _in=input_data, _timeout=2)
+                self.assertEqual(out, "no hang")

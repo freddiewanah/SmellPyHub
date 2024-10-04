@@ -1,0 +1,11 @@
+@pytest.mark.parametrize("cache_examples", [False, True])
+def test_interface_load_with_examples1(tmp_path, cache_examples):
+    test_file_dir = Path(Path(__file__).parent, "test_files")
+    cache_folder = tmp_path if not cache_examples else Path(tempfile.mkdtemp())
+
+    with patch("gradio.utils.get_cache_folder", return_value=cache_folder):
+        gr.load(
+            name="models/google/vit-base-patch16-224",
+            examples=[Path(test_file_dir, "cheetah1.jpg")],
+            cache_examples=cache_examples,
+        )

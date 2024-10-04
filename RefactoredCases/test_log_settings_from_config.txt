@@ -1,0 +1,14 @@
+def test_log_settings_from_config(self):
+    """Test that values set in ProjectFlags for log settings will set flags as expected"""
+    context = self.make_dbt_context("run", ["run"])
+
+    config = ProjectFlags(log_format="json", log_level="warn", use_colors=False)
+
+    flags = Flags(context, config)
+
+    assert flags.LOG_FORMAT == "json", "LOG_FORMAT should be 'json'"
+    assert flags.LOG_FORMAT_FILE == "json", "LOG_FORMAT_FILE should be 'json'"
+    assert flags.LOG_LEVEL == "warn", "LOG_LEVEL should be 'warn'"
+    assert flags.LOG_LEVEL_FILE == "warn", "LOG_LEVEL_FILE should be 'warn'"
+    assert not flags.USE_COLORS, "USE_COLORS should be False"
+    assert not flags.USE_COLORS_FILE, "USE_COLORS_FILE should be False"

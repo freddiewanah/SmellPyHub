@@ -1,0 +1,36 @@
+class ValidateTest(unittest.TestCase):
+    def setUp(self):
+        self.schema = config.ConfigSchema("foo")
+        self.schema["bar"] = config.String()
+
+    def test_empty_config_no_schemas(self):
+        conf, errors = config._validate({}, [])
+        assert {} == conf
+        assert {} == errors
+
+    def test_config_no_schemas(self):
+        raw_config = {"foo": {"bar": "baz"}}
+        conf, errors = config._validate(raw_config, [])
+        assert {} == conf
+        assert {} == errors
+
+    def test_empty_config_single_schema(self):
+        conf, errors = config._validate({}, [self.schema])
+        assert {"foo": {"bar": None}} == conf
+        assert {"foo": {"bar": "config key not found."}} == errors
+
+    def test_config_single_schema(self):
+        raw_config = {"foo": {"bar": "baz"}}
+        conf, errors = config._validate(raw_config, [self.schema])
+        assert {"foo": {"bar": "baz"}} == conf
+        assert {} == errors
+
+    def test_config_single_schema_config_error(self):
+        raw_config = {"foo": {"bar": "baz"}}
+        self.schema["bar"] = mock.Mock()
+        self.schema["bar"].deserialize.side_effect = ValueError("bad")
+        conf, errors = config._validate(raw_config, [self.schema])
+        assert {"foo": {"bar": None}} == conf
+        assert {"foo": {"bar": "bad"}} == errors
+
+    # TODO: add more tests

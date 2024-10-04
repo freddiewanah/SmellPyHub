@@ -1,0 +1,59 @@
+class test_black_base_duplicate(BlackBaseTestCase):
+    def test_gitignore_exclude(self) -> None:
+        path = THIS_DIR / "data" / "include_exclude_tests"
+        include = re.compile(r"\.pyi?$")
+        exclude = re.compile(r"")
+        report = black.Report()
+        gitignore = PathSpec.from_lines(
+            "gitwildmatch", ["exclude/", ".definitely_exclude"]
+        )
+        sources: List[Path] = []
+        expected = [
+            Path(path / "b/dont_exclude/a.py"),
+            Path(path / "b/dont_exclude/a.pyi"),
+        ]
+        this_abs = THIS_DIR.resolve()
+        sources.extend(
+            black.gen_python_files(
+                path.iterdir(),
+                this_abs,
+                include,
+                exclude,
+                None,
+                None,
+                report,
+                {path: gitignore},
+                verbose=False,
+                quiet=False,
+            )
+        )
+        assert sorted(expected) == sorted(sources)
+
+    def test_nested_gitignore(self) -> None:
+        path = Path(THIS_DIR / "data" / "nested_gitignore_tests")
+        include = re.compile(r"\.pyi?$")
+        exclude = re.compile(r"")
+        root_gitignore = black.files.get_gitignore(path)
+        report = black.Report()
+        expected: List[Path] = [
+            Path(path / "x.py"),
+            Path(path / "root/b.py"),
+            Path(path / "root/c.py"),
+            Path(path / "root/child/c.py"),
+        ]
+        this_abs = THIS_DIR.resolve()
+        sources = list(
+            black.gen_python_files(
+                path.iterdir(),
+                this_abs,
+                include,
+                exclude,
+                None,
+                None,
+                report,
+                {path: root_gitignore},
+                verbose=False,
+                quiet=False,
+            )
+        )
+        assert sorted(expected) == sorted(sources)

@@ -1,0 +1,63 @@
+
+class TestDeCollate(unittest.TestCase):
+
+    def setUp(self):
+        # Common setup can be placed here if necessary
+        set_determinism(seed=0)
+
+    def tearDown(self):
+        set_determinism(None)
+
+    def create_dataset(self, data, transforms):
+        if has_nib:
+            transforms = Compose([LoadImage(image_only=True), Compose(transforms)])
+        return Dataset(data, transforms)
+
+    def check_decollate(self, dataset):
+        batch_size = 2
+        num_workers = 2 if sys.platform == "linux" else 0
+        loader = DataLoader(dataset, batch_size=batch_size, shuffle=False, num_workers=num_workers)
+
+        for b, batch_data in enumerate(loader):
+            decollated_1 = decollate_batch(batch_data)
+            decollated_2 = Decollated(detach=True)(batch_data)
+
+            for decollated in [decollated_1, decollated_2]:
+                for i, d in enumerate(decollated):
+                    self.check_match(dataset[b * batch_size + i], d)
+
+    @parameterized.expand(TESTS_DICT)
+    def test_decollation_dict(self, *transforms):
+        im = create_test_image_2d(100, 101)[0]
+        data_dict = [{"image": make_nifti_image(im) if has_nib else im} for _ in range(6)]
+        t_compose = Compose([
+            EnsureChannelFirstd(KEYS, channel_dim="no_channel"),
+            Compose(transforms),
+            ToTensord(KEYS)
+        ])
+        dataset = self.create_dataset(data_dict, t_compose)
+        self.check_decollate(dataset)
+
+    @parameterized.expand(TESTS_LIST)
+    def test_decollation_tensor(self, *transforms):
+        im = create_test_image_2d(100, 101)[0]
+        data_list = [make_nifti_image(im) if has_nib else im for _ in range(6)]
+        t_compose = Compose([
+            EnsureChannelFirst(channel_dim="no_channel"),
+            Compose(transforms),
+            ToTensor()
+        ])
+        dataset = self.create_dataset(data_list, t_compose)
+        self.check_decollate(dataset)
+
+    @parameterized.expand(TESTS_LIST)
+    def test_decollation_list(self, *transforms):
+        im = create_test_image_2d(100, 101)[0]
+        data_list = [make_nifti_image(im) if has_nib else im for _ in range(6)]
+        t_compose = Compose([
+            EnsureChannelFirst(channel_dim="no_channel"),
+            Compose(transforms),
+            ToTensor()
+        ])
+        dataset = self.create_dataset(data_list, t_compose)
+        self.check_decollate(dataset)

@@ -1,0 +1,6 @@
+{
+  "RedundantPrint": {
+    "Definition": "A test case contains a print statement.",
+    "Steps": "1. Replace the print statement with an assertion: Replace each print statement with an assertion that tests the functionality it is supposed to test. 2. Remove the print statement: If the print statement is not needed, remove it."
+  }
+}

@@ -1,0 +1,6 @@
+test_suite,test_name,smell,metric_value
+testcontext.py,test_with_session,Redundant Print,4
+testcontext.py,test_with_jt,Redundant Print,1
+testwrap.py,test_allocate,Unknown Test,0
+testcontext.py,test_with_session,Unknown Test,0
+testcontext.py,test_with_jt,Unknown Test,0

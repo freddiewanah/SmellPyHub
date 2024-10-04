@@ -1,0 +1,10 @@
+    def test_invalid_gzip(self):
+        # test if client hangs on tricky invalid gzip
+        # curl/simple httpclient have different behavior (exception, logging)
+        with ExpectLog(
+            app_log, "(Uncaught exception|Exception in callback)", required=False
+        ):
+            with self.assertRaises(HTTPError):  # type: ignore
+                response = self.fetch("/invalid_gzip")
+                self.assertEqual(response.code, 200)
+                self.assertEqual(response.body[:14], b"Hello World 0\n")

@@ -1,0 +1,13 @@
+@pytest.mark.parametrize(
+    "space_1,space_2",
+    TESTING_SPACES_PERMUTATIONS,
+    ids=[f"({s1}, {s2})" for s1, s2 in TESTING_SPACES_PERMUTATIONS],
+)
+def test_space_equality(space_1, space_2):
+    """Check that `space.__eq__` works.
+
+    Testing spaces permutations contains all combinations of testing spaces of the same type.
+    """
+    assert space_1 == space_1
+    assert space_2 == space_2
+    assert space_1 != space_2

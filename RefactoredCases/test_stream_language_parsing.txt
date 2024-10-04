@@ -1,0 +1,24 @@
+@pytest.mark.parametrize("infos, expected_languages", [
+    ("""
+Input #0, mpeg, from 'clip.mp4':
+  Duration: 00:02:15.00, start: 52874.498178, bitrate: 266 kb/s
+    Stream #0:0[0x1e0]: Video: ..., 25 tbr, 90k tbn, 50 tbc
+    Stream #0:1[0x1c0]: Audio: mp2, 0 channels, s16p
+At least one output file must be specified""",
+     [None, None]),
+
+    ("""
+Input #0, mpeg, from 'clip.mp4':
+  Duration: 00:02:15.00, start: 52874.498178, bitrate: 266 kb/s
+    Stream #0:0[0x1e0](eng): Video: ..., 25 tbr, 90k tbn, 50 tbc
+    Stream #0:1[0x1c0](und): Audio: mp2, 0 channels, s16p
+At least one output file must be specified""",
+     ["eng", None]),
+])
+def test_stream_language_parsing(infos, expected_languages):
+    d = FFmpegInfosParser(infos, "clip.mp4").parse()
+
+    assert d
+    assert len(d["inputs"][0]["streams"]) == 2
+    for i, expected_language in enumerate(expected_languages):
+        assert d["inputs"][0]["streams"][i]["language"] == expected_language

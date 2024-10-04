@@ -1,0 +1,6 @@
+{
+  "GeneralFixture": {
+    "Definition": "Not all fields instantiated within the setUp() method of a test suite are utilized by all test cases in this test suite.",
+    "Steps": "1. Understand the purpose of having the method that is in setUp() but not used by the test cases. 2. Comment out the untested parameters in the setUp(). 3. If the parameters are partly used in different test cases, split the test class into two or more where each test class only use the setup parameters within its own test methods."
+  }
+}

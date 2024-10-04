@@ -1,0 +1,5 @@
+    def test_blackd_main(self) -> None:
+        with patch("blackd.web.run_app"):
+            result = CliRunner().invoke(blackd.main, [])
+            self.assertIsNone(result.exception)
+            self.assertEqual(result.exit_code, 0)

@@ -1,0 +1,15 @@
+# @pytest.mark.skip("TODO: write manifest files to disk")
+# def test_select_path(manifest):
+    # This test is currently skipped because the functionality to write manifest files to disk is not yet implemented.
+    # Once the functionality is implemented, this test can be enabled to ensure the path selection works as expected.
+    # Commenting out the test body to indicate it's intentionally inactive.
+    # methods = MethodManager(manifest, None)
+    # method = methods.get_method("path", [])
+    # assert isinstance(method, PathSelectorMethod)
+    # assert method.arguments == []
+    # assert search_manifest_using_method(manifest, method, "subdirectory/*.sql") == {"union_model", "table_model"}
+    # assert search_manifest_using_method(manifest, method, "subdirectory/union_model.sql") == {"union_model"}
+    # assert search_manifest_using_method(manifest, method, "models/*.sql") == {"view_model", "ephemeral_model"}
+    # assert not search_manifest_using_method(manifest, method, "missing")
+    # assert not search_manifest_using_method(manifest, method, "models/missing.sql")
+    # assert not search_manifest_using_method(manifest, method, "models/missing*")

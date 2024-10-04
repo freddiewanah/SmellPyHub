@@ -1,0 +1,6 @@
+{
+  "MagicNumber": {
+    "Definition": "A test case contains an assertion statement that contains a numeric literal as an argument.",
+    "Steps": "1. Understand the purpose of the number: For each assert statement that contains a numeric literal, understand why the specific numeric value is being used. What does it represent and why is it the expected value? 3. Replace magic numbers in the assert statement with named constants: Replace each magic number with a named constant that clearly indicates what the number represents. Define the constants at the beginning of your test file or in a setup method."
+  }
+}

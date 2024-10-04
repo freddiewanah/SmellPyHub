@@ -1,0 +1,13 @@
+@gen_test
+def test_check_origin_invalid_partial_url(self):
+    # Constants
+    FORBIDDEN_STATUS_CODE = 403
+
+    port = self.get_http_port()
+    url = "ws://127.0.0.1:%d/echo" % port
+    headers = {"Origin": "127.0.0.1:%d" % port}
+
+    with self.assertRaises(HTTPError) as cm:
+        yield websocket_connect(HTTPRequest(url, headers=headers))
+
+    self.assertEqual(cm.exception.code, FORBIDDEN_STATUS_CODE)

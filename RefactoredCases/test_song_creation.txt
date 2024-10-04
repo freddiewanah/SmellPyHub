@@ -1,0 +1,89 @@
+test_data = [
+    (
+        "from_data_dump",
+        """
+        {
+            "name": "Ropes",
+            "artists": ["Dirty Palm", "Chandler Jewels"],
+            "album_id": "4SN9kQlguIcjPtMNQJwD30",
+            "album_name": "Ropes",
+            "album_artist": "Dirty Palm",
+            "genres": ["gaming edm", "melbourne bounce international"],
+            "disc_number": 1,
+            "duration": 188,
+            "year": 2021,
+            "date": "2021-10-28",
+            "track_number": 1,
+            "tracks_count": 1,
+            "isrc": "GB2LD2110301",
+            "song_id": "1t2qKa8K72IBC8yQlhD9bU",
+            "cover_url": "https://i.scdn.co/image/ab67616d0000b273fe2cb38e4d2412dbb0e54332",
+            "explicit": false,
+            "download_url": null,
+            "artist": "Dirty Palm",
+            "disc_count": 1,
+            "copyright_text": "",
+            "publisher": "",
+            "url": "https://open.spotify.com/track/1t2qKa8K72IBC8yQlhD9bU",
+            "popularity": 0
+        }
+        """
+    ),
+    (
+        "from_dict",
+        {
+            "name": "Ropes",
+            "artists": ["Dirty Palm", "Chandler Jewels"],
+            "album_id": "4SN9kQlguIasvwv",
+            "album_name": "Ropes",
+            "album_artist": "Dirty Palm",
+            "genres": ["gaming edm", "melbourne bounce international"],
+            "disc_number": 1,
+            "duration": 188,
+            "year": 2021,
+            "date": "2021-10-28",
+            "track_number": 1,
+            "tracks_count": 1,
+            "isrc": "GB2LD2110301",
+            "song_id": "1t2qKa8K72IBC8yQlhD9bU",
+            "cover_url": "https://i.scdn.co/image/ab67616d0000b273fe2cb38e4d2412dbb0e54332",
+            "explicit": False,
+            "download_url": None,
+            "artist": "Dirty Palm",
+            "disc_count": 1,
+            "copyright_text": "",
+            "publisher": "",
+            "url": "https://open.spotify.com/track/1t2qKa8K72IBC8yQlhD9bU",
+            "popularity": 0,
+        },
+    ),
+]
+
+
+@pytest.mark.parametrize("source_type,data", test_data)
+def test_song_creation(source_type, data):
+    if source_type == "from_data_dump":
+        song = Song.from_data_dump(data)
+    elif source_type == "from_dict":
+        song = Song.from_dict(data)
+
+    # Now perform the assertions, which are common to both test cases
+    assert song.name == "Ropes"
+    assert song.artists == ["Dirty Palm", "Chandler Jewels"]
+    assert song.album_name == "Ropes"
+    assert song.album_artist == "Dirty Palm"
+    assert song.genres == ["gaming edm", "melbourne bounce international"]
+    assert song.disc_number == 1
+    assert song.duration == 188
+    assert song.year == 2021
+    assert song.date == "2021-10-28"
+    assert song.track_number == 1
+    assert song.tracks_count == 1
+    assert song.isrc == "GB2LD2110301"
+    assert song.song_id == "1t2qKa8K72IBC8yQlhD9bU"
+    assert (
+            song.cover_url
+            == "https://i.scdn.co/image/ab67616d0000b273fe2cb38e4d2412dbb0e54332"
+    )
+    assert song.explicit == False
+    assert song.popularity == 0

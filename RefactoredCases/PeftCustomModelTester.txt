@@ -1,0 +1,24 @@
+class PeftCustomModelTester(unittest.TestCase, PeftCommonTester):
+    """TODO"""
+
+    transformers_class = MockTransformerWrapper
+
+    def prepare_inputs_for_testing(self):
+        X = torch.arange(90).view(9, 10).to(self.torch_device)
+        return {"X": X}
+
+    @parameterized.expand(TEST_CASES)
+    def test_attributes_parametrized(self, test_name, model_id, config_cls, config_kwargs):
+        self._test_model_attr(model_id, config_cls, config_kwargs)
+
+    @parameterized.expand(TEST_CASES)
+    def test_adapter_name(self, test_name, model_id, config_cls, config_kwargs):
+        self._test_adapter_name(model_id, config_cls, config_kwargs)
+
+    # @parameterized.expand(TEST_CASES)
+    # def test_prepare_for_training_parametrized(self, test_name, model_id, config_cls, config_kwargs):
+    #     # This test does not work with custom models because it assumes that
+    #     # there is always a method get_input_embeddings that returns a layer
+    #     # which does not need updates. Instead, a new test is added below that
+    #     # checks that LoRA works as expected.
+    #     pass

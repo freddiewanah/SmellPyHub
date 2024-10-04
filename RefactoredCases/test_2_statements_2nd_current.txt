@@ -1,0 +1,23 @@
+import pytest
+
+@pytest.mark.parametrize("first_input, second_input, expected_output", [
+    ('select * from a; select * from ', 'select * from a; select * from ', [
+        {'type': 'table', 'schema': []},
+        {'type': 'view', 'schema': []},
+        {'type': 'schema'}
+    ]),
+    ('select * from a; select  from b', 'select * from a; select ', [
+        {'type': 'alias', 'aliases': ['b']},
+        {'type': 'column', 'tables': [(None, 'b', None)]},
+        {'type': 'function', 'schema': []},
+        {'type': 'keyword'}
+    ]),
+    ('select * from; select * from ', 'select * from; select * from ', [
+        {'type': 'table', 'schema': []},
+        {'type': 'view', 'schema': []},
+        {'type': 'schema'}
+    ])
+])
+def test_suggest_type(first_input, second_input, expected_output):
+    suggestions = suggest_type(first_input, second_input)
+    assert sorted_dicts(suggestions) == sorted_dicts(expected_output)

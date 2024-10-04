@@ -1,0 +1,50 @@
+class TestDataLoaderWithVaultRealFiles(unittest.TestCase):
+
+    def setUp(self):
+        self._loader = DataLoader()
+        vault_secrets = [('default', TextVaultSecret('ansible'))]
+        self._loader.set_vault_secrets(vault_secrets)
+        self.test_vault_data_path = os.path.join(os.path.dirname(__file__), 'fixtures', 'vault.yml')
+
+    def tearDown(self):
+        pass
+
+    def test_get_real_file_vault(self):
+        real_file_path = self._loader.get_real_file(self.test_vault_data_path)
+        self.assertTrue(os.path.exists(real_file_path))
+
+    def test_get_real_file_vault_no_vault(self):
+        self._loader.set_vault_secrets(None)
+        self.assertRaises(AnsibleParserError, self._loader.get_real_file, self.test_vault_data_path)
+
+    def test_get_real_file_vault_wrong_password(self):
+        wrong_vault = [('default', TextVaultSecret('wrong_password'))]
+        self._loader.set_vault_secrets(wrong_vault)
+        self.assertRaises(AnsibleVaultError, self._loader.get_real_file, self.test_vault_data_path)
+
+    def test_get_real_file_not_a_path(self):
+        self.assertRaisesRegex(AnsibleParserError, 'Invalid filename', self._loader.get_real_file, None)
+
+
+class TestDataLoaderWithVaultFileParsing(unittest.TestCase):
+
+    def setUp(self):
+        self._loader = DataLoader()
+        # Set up that's specific to parsing tests might be added here.
+
+    def tearDown(self):
+        pass
+
+    @patch.multiple(DataLoader, path_exists=lambda s, x: True, is_file=lambda s, x: True)
+    def test_parse_from_vault_1_1_file(self):
+        vaulted_data = """$ANSIBLE_VAULT;1.1;AES256
+33343734386261666161626433386662623039356366656637303939306563376130623138626165
+6436333766346533353463636566313332623130383662340a393835656134633665333861393331
+37666233346464636263636530626332623035633135363732623332313534306438393366323966
+3135306561356164310a343937653834643433343734653137383339323330626437313562306630
+3035
+"""
+
+        with patch('builtins.open', mock_open(read_data=vaulted_data.encode('utf-8'))):
+            output = self._loader.load_from_file('dummy_vault.txt')
+            self.assertEqual(output, dict(foo='bar'))

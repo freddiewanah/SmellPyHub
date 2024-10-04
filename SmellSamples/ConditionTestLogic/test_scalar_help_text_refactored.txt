@@ -1,0 +1,7 @@
+@pytest.mark.parametrize(("styling_context", "expected"), [("css", "max-width"), ("inline", "max_width")])
+def test_scalar_help_text2(styling_context, expected):
+    rendered = render(scalar_help_text("max-width", styling_context))
+    assert "Invalid value for" in rendered
+
+    # Ensure property name is contextualised to inline/css styling
+    assert expected in rendered

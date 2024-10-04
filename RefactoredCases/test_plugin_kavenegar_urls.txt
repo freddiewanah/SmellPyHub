@@ -1,0 +1,13 @@
+    def test_plugin_kavenegar_urls(self):
+        """
+        Test NotifyKavenegar() Apprise URLs
+        """
+        # Initialize the URL tester with predefined tests
+        tester = AppriseURLTester(tests=apprise_url_tests)
+
+        # Run the tests and capture the results
+        result = tester.run_all()
+
+        # Assert that the result meets the expected outcome
+        # Assuming `result` is a boolean indicating success
+        self.assertTrue(result, "Apprise URL tests failed")

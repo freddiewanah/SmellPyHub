@@ -1,0 +1,6 @@
+{
+  "ConstructorInitialization": {
+    "Definition": "A test suite contains a constructor declaration (an __init__ method).",
+    "Steps": "1. Understand the purpose of the constructor: Understand why the constructor is being used in the test class. Is it setting up state or dependencies that are used by the test methods? 3. Replace constructor with setup method: If possible, replace the constructor with a setup method (such as setUp in unittest) that is clearly identified as setting up the state for each test. This makes it clear where setup code is and ensures that setup code is run before each test, not just when the test class is instantiated."
+  },
+}

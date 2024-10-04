@@ -1,0 +1,6 @@
+    def test_write_after_close(self):
+        ws = yield self.ws_connect("/close_reason")
+        msg = yield ws.read_message()
+        self.assertIsNone(msg)
+        with self.assertRaises(WebSocketClosedError):
+            ws.write_message("hello")

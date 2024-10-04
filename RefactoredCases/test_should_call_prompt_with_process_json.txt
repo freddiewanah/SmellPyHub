@@ -1,0 +1,11 @@
+def test_should_call_prompt_with_process_json(mocker):
+    """
+    Test to make sure that `process_json` is actually being used.
+    Verifies generation of a processor for the user input.
+    """
+    mock_prompt = mocker.patch('cookiecutter.prompt.JsonPrompt.ask', autospec=True)
+    read_user_dict('name', {'project_slug': 'pytest-plugin'})
+
+    args, kwargs = mock_prompt.call_args
+    assert args == ('name [cyan bold](default)[/]',)
+    assert kwargs['default'] == {'project_slug': 'pytest-plugin'}

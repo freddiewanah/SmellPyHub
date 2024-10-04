@@ -1,0 +1,6 @@
+{
+  "AssertRoulette": {
+    "Definition": "A test case contains more than one assertion statement without an explanation/message.",
+    "Steps": "1. Understand the purpose of each assertion: For each assertion, understand what part of the functionality it is testing. 2. Group assertions by functionality: Group assertions that test the same functionality. 3. Add an explanation/message to each assertion: For each assertion, add an explanation/message that describes what part of the functionality it is testing. "
+  },
+}

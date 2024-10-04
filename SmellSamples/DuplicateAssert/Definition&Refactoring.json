@@ -1,0 +1,6 @@
+{
+  "DuplicateAssert": {
+    "Definition": "A test case contains more than one assertion statement with the same parameters.",
+    "Steps": "1. Understand the purpose of each assertion: For each assertion, understand what part of the functionality it is testing. 2. Group assertions by functionality: Group assertions that have the same parameters. 3. Remove duplicate assertions: If two or more assertions are testing the same functionality, remove all but one of them. 4. Extract the assertions or parameterize functions: If the assertions are testing the same functionality, but different conditions, extract the assertions into a internal method or parameterize the functions with subTest or @pytest.mark.parametrize."
+  }
+}

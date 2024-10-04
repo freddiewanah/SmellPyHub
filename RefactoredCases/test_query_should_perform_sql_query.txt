@@ -1,0 +1,15 @@
+def test_query_should_perform_sql_query(self):
+    """
+    Test query(self, query)
+    """
+    EXPECTED_QUERY_COUNT = 1
+
+    opts = self.default_options
+    opts['__modules__'] = dict()
+    sfwebui = SpiderFootWebUi(self.web_default_options, opts)
+
+    select = "12345"
+    query = sfwebui.query(f"SELECT {select}")
+    self.assertIsInstance(query, list)
+    self.assertEqual(len(query), EXPECTED_QUERY_COUNT)
+    self.assertEqual(str(query[0].get(select)), str(select))

@@ -1,0 +1,23 @@
+class TestBase(unittest.TestCase):
+    ClassUnderTest = base.Base
+
+    def setUp(self):
+        self.assorted_vars = {'var_2_key': 'var_2_value',
+                              'var_1_key': 'var_1_value',
+                              'a_list': ['a_list_1', 'a_list_2'],
+                              'a_dict': {'a_dict_key': 'a_dict_value'},
+                              'a_set': set(['set_1', 'set_2']),
+                              'a_int': 42,
+                              'a_float': 37.371,
+                              'a_bool': True,
+                              'a_none': None,
+                              }
+        self.b = self.ClassUnderTest()
+
+
+    def test_getters(self):
+        # not sure why these exist, but here are tests anyway
+        loader = self.b.get_loader()
+        variable_manager = self.b.get_variable_manager()
+        self.assertEqual(loader, self.b._loader)
+        self.assertEqual(variable_manager, self.b._variable_manager)

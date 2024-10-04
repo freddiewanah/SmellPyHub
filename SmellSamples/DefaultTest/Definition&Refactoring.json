@@ -1,0 +1,7 @@
+{
+  "DefaultTest": {
+   "Definition": "A test suite is called MyTestCase.",
+    "Steps": "1. Understand the purpose of the test suite: For each test suite named 'MyTestCase', understand what functionality or behavior it is testing. 3. Rename the test suite: Rename each 'MyTestCase' test suite with a name that clearly indicates what it is testing."
+
+  }
+}

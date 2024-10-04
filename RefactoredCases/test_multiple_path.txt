@@ -1,0 +1,33 @@
+HTTP_SUCCESS = 200
+EXPECTED_RESPONSE_DEFAULT = {"foo": "bar"}
+EXPECTED_RESPONSE_MODIFIED = {"foo": "baz"}
+
+def test_multiple_path():
+    app = FastAPI()
+
+    @app.get("/test1")
+    @app.get("/test2")
+    async def test(var: Annotated[str, Query()] = "bar"):
+        return {"foo": var}
+
+    client = TestClient(app)
+
+    # Test default response for "/test1"
+    response = client.get("/test1")
+    assert response.status_code == HTTP_SUCCESS
+    assert response.json() == EXPECTED_RESPONSE_DEFAULT
+
+    # Test modified response for "/test1"
+    response = client.get("/test1", params={"var": "baz"})
+    assert response.status_code == HTTP_SUCCESS
+    assert response.json() == EXPECTED_RESPONSE_MODIFIED
+
+    # Test default response for "/test2"
+    response = client.get("/test2")
+    assert response.status_code == HTTP_SUCCESS
+    assert response.json() == EXPECTED_RESPONSE_DEFAULT
+
+    # Test modified response for "/test2"
+    response = client.get("/test2", params={"var": "baz"})
+    assert response.status_code == HTTP_SUCCESS
+    assert response.json() == EXPECTED_RESPONSE_MODIFIED

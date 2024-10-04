@@ -1,0 +1,6 @@
+{
+  "RedundantAssertion": {
+    "Definition": "A test case contains an assertion statement in which (1) the expected and actual parameters of equality are the same, e.g., assertEqual(X, X) or (2) the assertion of truth is carried out on the unchangeable object, e.g., assertTrue(True).",
+    "Steps": "1. Remove the assertion: If the assertion is not needed, remove it. 2. Replace the assertion: If the assertion is needed,  replace it with an assertion that tests the functionality it is supposed to test."
+  }
+}

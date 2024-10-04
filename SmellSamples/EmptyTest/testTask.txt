@@ -1,0 +1,26 @@
+class TestTask(unittest.TestCase):
+
+    def setUp(self):
+        pass
+
+    def tearDown(self):
+        pass
+
+    def test_construct_empty_task(self):
+        Task()
+
+    def test_construct_task_with_role(self):
+        pass
+
+    def test_construct_task_with_block(self):
+        pass
+
+    def test_construct_task_with_role_and_block(self):
+        pass
+
+    def test_load_task_simple(self):
+        t = Task.load(basic_command_task)
+        assert t is not None
+        self.assertEqual(t.name, basic_command_task['name'])
+        self.assertEqual(t.action, 'command')
+        self.assertEqual(t.args, dict(_raw_params='echo hi'))

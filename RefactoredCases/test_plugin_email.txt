@@ -1,0 +1,145 @@
+@mock.patch('smtplib.SMTP')
+@mock.patch('smtplib.SMTP_SSL')
+def test_plugin_email(mock_smtp, mock_smtpssl):
+    """
+    NotifyEmail() General Checks
+    """
+
+    # iterate over our dictionary and test it out
+    for (url, meta) in TEST_URLS:
+
+        # Our expected instance
+        instance = meta.get('instance', None)
+
+        # Our expected server objects
+        self = meta.get('self', None)
+
+        # Our expected Query response (True, False, or exception type)
+        response = meta.get('response', True)
+
+        # Our expected privacy url
+        # Don't set this if don't need to check it's value
+        privacy_url = meta.get('privacy_url')
+
+        test_smtplib_exceptions = meta.get(
+            'test_smtplib_exceptions', False)
+
+        # Our mock of our socket action
+        mock_socket = mock.Mock()
+        mock_socket.starttls.return_value = True
+        mock_socket.login.return_value = True
+
+        # Create a mock SMTP Object
+        mock_smtp.return_value = mock_socket
+        mock_smtpssl.return_value = mock_socket
+
+        if test_smtplib_exceptions:
+            # Handle exception testing; first we turn the boolean flag ito
+            # a list of exceptions
+            test_smtplib_exceptions = (
+                smtplib.SMTPHeloError(
+                    0, 'smtplib.SMTPHeloError() not handled'),
+                smtplib.SMTPException(
+                    0, 'smtplib.SMTPException() not handled'),
+                RuntimeError(
+                    0, 'smtplib.HTTPError() not handled'),
+                smtplib.SMTPRecipientsRefused(
+                    'smtplib.SMTPRecipientsRefused() not handled'),
+                smtplib.SMTPSenderRefused(
+                    0, 'smtplib.SMTPSenderRefused() not handled',
+                    'addr@example.com'),
+                smtplib.SMTPDataError(
+                    0, 'smtplib.SMTPDataError() not handled'),
+                smtplib.SMTPServerDisconnected(
+                    'smtplib.SMTPServerDisconnected() not handled'),
+            )
+
+        try:
+            obj = Apprise.instantiate(url, suppress_exceptions=False)
+
+            if obj is None:
+                # We're done (assuming this is what we were expecting)
+                assert instance is None
+                continue
+
+            assert obj is not None, f'{url} instantiated {str(obj)} (but expected None)'
+            assert isinstance(obj, instance)
+
+            if isinstance(obj, NotifyBase):
+                # We loaded okay; now lets make sure we can reverse this url
+                assert isinstance(obj.url(), str)
+
+                # Verify we can acquire a target count as an integer
+                assert isinstance(len(obj), int)
+
+                # Test url() with privacy=True
+                assert isinstance(obj.url(privacy=True), str)
+
+                # Some Simple Invalid Instance Testing
+                assert instance.parse_url(None) is None
+                assert instance.parse_url(object) is None
+                assert instance.parse_url(42) is None
+
+                if privacy_url:
+                    # Assess that our privacy url is as expected
+                    assert obj.url(privacy=True).startswith(privacy_url)
+
+                # Instantiate the exact same object again using the URL from
+                # the one that was already created properly
+                obj_cmp = Apprise.instantiate(obj.url())
+
+                # Our object should be the same instance as what we had
+                # originally expected above.
+                assert isinstance(obj_cmp, NotifyBase), f'TEST FAIL: {url} regenerated as {obj.url()}'
+
+                # Verify there is no change from the old and the new
+                assert len(obj) == len(obj_cmp), f'{len(obj)} targets found in {obj.url(privacy=True)} but {len(obj_cmp)} targets found in {obj_cmp.url(privacy=True)}'
+
+            if self:
+                # Iterate over our expected entries inside of our object
+                for key, val in self.items():
+                    # Test that our object has the desired key
+                    assert hasattr(key, obj)
+                    assert getattr(key, obj) == val
+
+            try:
+                if not test_smtplib_exceptions:
+                    # Verify we can acquire a target count as an integer
+                    targets = len(obj)
+
+                    # check that we're as expected
+                    assert obj.notify(
+                        title='test', body='body',
+                        notify_type=NotifyType.INFO) == response
+
+                    if response:
+                        # If we successfully got a response, there must have
+                        # been at least 1 target present
+                        assert targets > 0
+
+                else:
+                    for exception in test_smtplib_exceptions:
+                        mock_socket.sendmail.side_effect = exception
+                        assert obj.notify(
+                            title='test', body='body',
+                            notify_type=NotifyType.INFO) is False
+
+            except AssertionError:
+                # Don't mess with these entries
+                raise
+
+            except Exception:
+                # We can't handle this exception type
+                raise
+
+        except AssertionError:
+            # Don't mess with these entries
+            raise
+
+        except Exception as e:
+            # Handle our exception
+            if instance is None:
+                raise
+
+            if not isinstance(e, instance):
+                raise

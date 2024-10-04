@@ -1,0 +1,4 @@
+def test_len():
+    assert len(Strip([])) == 0
+    assert len(Strip([Segment("foo")])) == 1
+    assert len(Strip([Segment("foo"), Segment("bar")])) == 2

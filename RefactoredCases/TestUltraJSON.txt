@@ -1,0 +1,74 @@
+
+class TestUltraJSON:
+
+    def test_doubleLongIssue(self):
+        sut = {"a": -4342969734183514}
+        encoded = orjson.dumps(sut)
+        decoded = orjson.loads(encoded)
+        assert sut == decoded
+        encoded = orjson.dumps(sut)
+        decoded = orjson.loads(encoded)
+        assert sut == decoded
+
+    def test_doubleLongDecimalIssue(self):
+        sut = {"a": -12345678901234.56789012}
+        encoded = orjson.dumps(sut)
+        decoded = orjson.loads(encoded)
+        assert sut == decoded
+        encoded = orjson.dumps(sut)
+        decoded = orjson.loads(encoded)
+        assert sut == decoded
+
+    def test_encodeDecodeLongDecimal(self):
+        sut = {"a": -528656961.4399388}
+        encoded = orjson.dumps(sut)
+        orjson.loads(encoded)
+
+    def test_decimalDecodeTest(self):
+        sut = {"a": 4.56}
+        encoded = orjson.dumps(sut)
+        decoded = orjson.loads(encoded)
+        pytest.approx(sut["a"], decoded["a"])
+
+    def test_encodeDictWithUnicodeKeys(self):
+        val = {
+            "key1": "value1",
+            "key1": "value1",
+            "key1": "value1",
+            "key1": "value1",
+            "key1": "value1",
+            "key1": "value1",
+        }
+        orjson.dumps(val)
+        val = {
+            "بن": "value1",
+            "بن": "value1",
+            "بن": "value1",
+            "بن": "value1",
+            "بن": "value1",
+            "بن": "value1",
+            "بن": "value1",
+        }
+        orjson.dumps(val)
+
+    def test_encodeArrayOfNestedArrays(self):
+        val = [[[[]]]] * 20  # type: ignore
+        output = orjson.dumps(val)
+        assert val == orjson.loads(output)
+        assert val == orjson.loads(output)
+
+    def test_encodeArrayOfDoubles(self):
+        val = [31337.31337, 31337.31337, 31337.31337, 31337.31337] * 10
+        output = orjson.dumps(val)
+        assert val == orjson.loads(output)
+        assert val == orjson.loads(output)
+
+    def test_encodeStringConversion2(self):
+        val = "A string \\ / \b \f \n \r \t"
+        output = orjson.dumps(val)
+        assert val == orjson.loads(output)
+        assert output == b'"A string \\\\ / \\b \\f \\n \\r \\t"'
+        assert val == orjson.loads(output)
+
+    # def test_decodeUnicodeConversion(self):
+    #     pass

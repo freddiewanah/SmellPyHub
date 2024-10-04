@@ -1,0 +1,30 @@
+def test_lora_linear_init_default(self):
+    # Constants for clarity
+    MIN_P_VALUE_FOR_UNIFORM_DISTRIBUTION = 0.5
+    MAX_P_VALUE_FOR_NORMAL_DISTRIBUTION = 0.05
+    EXPECTED_WEIGHT_B_VALUE = 0.0
+
+    # Set seed for reproducibility
+    torch.manual_seed(0)
+
+    # Initialize model with configuration
+    model = self.get_model()
+    config = LoraConfig(target_modules=["linear"])
+    model = get_peft_model(model, config)
+
+    # Get weights from model
+    weight_A = model.linear.lora_A["default"].weight
+    weight_B = model.linear.lora_B["default"].weight
+
+    # Use statistical test to check if weight A is from a uniform distribution
+    unif = self.get_uniform(weight_A.min().item(), weight_A.max().item())
+    _, p_value = stats.kstest(weight_A.detach().flatten().cpu().numpy(), unif.flatten().cpu().numpy())
+    self.assertGreater(p_value, MIN_P_VALUE_FOR_UNIFORM_DISTRIBUTION)
+
+    # Check that weight A is *not* from a normal distribution
+    normal = self.get_normal(weight_A.mean().item(), weight_A.std().item())
+    _, p_value = stats.kstest(weight_A.detach().flatten().cpu().numpy(), normal.flatten().cpu().numpy())
+    self.assertLess(p_value, MAX_P_VALUE_FOR_NORMAL_DISTRIBUTION)
+
+    # Check that weight B is zero
+    self.assertTrue((weight_B == EXPECTED_WEIGHT_B_VALUE).all())

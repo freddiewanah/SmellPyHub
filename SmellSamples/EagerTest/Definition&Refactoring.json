@@ -1,0 +1,6 @@
+{
+  "EagerTest": {
+    "Definition": "A test method that tests more than one method in one test method.",
+     "Steps": "1. Break down the test method:Break down your test method into smaller methods, each testing a single method of the system under test. Name each new test method in a way that clearly indicates the functionality or behavior it is testing. 2. Refactor: Move the appropriate setup, execution, and verification code to each new test method."
+  }
+}

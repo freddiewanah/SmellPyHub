@@ -1,0 +1,17 @@
+async def test_refresh_called_once(refresher):
+    """
+    Test to ensure that the refresh method is called once and behaves as expected.
+
+    :param refresher: The refresher instance being tested.
+    """
+    callbacks = Mock()
+    sqlexecute = Mock()
+
+    with patch.object(refresher, '_bg_refresh') as bg_refresh:
+        actual = await refresher.refresh(sqlexecute, callbacks)
+        # Wait for the background thread to process, necessary for async operations.
+        await asyncio.sleep(0.1)  # Reduced sleep time and using asyncio.sleep for non-blocking wait.
+        assert len(actual) == 1
+        assert len(actual[0]) == 4
+        assert actual[0][3] == 'Auto-completion refresh started in the background.'
+        bg_refresh.assert_called_with(sqlexecute, callbacks, {})

@@ -1,0 +1,45 @@
+@mock.patch('requests.get')
+@mock.patch('requests.post')
+def test_plugin_pushed_edge_cases(mock_post, mock_get):
+    """
+    NotifyPushed() Edge Cases
+    """
+
+    # Chat ID and required input
+    recipients = '@ABCDEFG, @DEFGHIJ, #channel, #channel2'
+    app_key = 'ABCDEFG'
+    app_secret = 'ABCDEFG'
+
+    # Prepare Mock
+    mock_get.return_value = requests.Request()
+    mock_post.return_value = requests.Request()
+    mock_post.return_value.status_code = requests.codes.ok
+    mock_get.return_value.status_code = requests.codes.ok
+
+    # Test missing or empty app_key and app_secret
+    for key, secret in [(None, app_secret), ("  ", app_secret), (app_key, None), (app_key, "   ")]:
+        with pytest.raises(TypeError):
+            NotifyPushed(
+                app_key=key,
+                app_secret=secret,
+                recipients=None,
+            )
+
+    # Test with recipients=None and targets=recipients
+    recipient_cases = [
+        (None, 0, 0),
+        (recipients, 2, 2),
+    ]
+    for rec, expected_channels, expected_users in recipient_cases:
+        obj = NotifyPushed(
+            app_key=app_key,
+            app_secret=app_secret,
+            targets=rec,
+        )
+        assert isinstance(obj, NotifyPushed)
+        assert len(obj.channels) == expected_channels
+        assert len(obj.users) == expected_users
+
+    # Prepare Mock to fail
+    mock_post.return_value.status_code = requests.codes.internal_server_error
+    mock_get.return_value.status_code = requests.codes.internal_server_error

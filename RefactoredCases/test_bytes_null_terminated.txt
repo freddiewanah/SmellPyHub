@@ -1,0 +1,7 @@
+    def test_bytes_null_terminated(self):
+        """dumps() PyBytesObject buffer is null-terminated"""
+        # Act
+        result = orjson.dumps(1596728892)
+
+        # Assert
+        self.assertEqual(result[-1], 0, "The buffer is not null-terminated")

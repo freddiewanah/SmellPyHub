@@ -1,0 +1,4 @@
+def test_len():
+    assert len(Strip([])) == 0, "Empty strip should have length 0"
+    assert len(Strip([Segment("foo")])) == 1, "Strip with one segment should have length 1"
+    assert len(Strip([Segment("foo"), Segment("bar")])) == 2, "Strip with two segments should have length 2"

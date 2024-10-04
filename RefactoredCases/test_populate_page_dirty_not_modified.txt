@@ -1,0 +1,10 @@
+@tempdir(files={'index.md': 'page content'})
+@tempdir(files={'index.html': '<p>page content</p>'})
+def test_populate_page_dirty_not_modified(self, site_dir, docs_dir):
+    cfg = load_config(docs_dir=docs_dir, site_dir=site_dir)
+    file = File('index.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)
+    page = Page('Foo', file, cfg)
+    build._populate_page(page, cfg, Files([file]), dirty=True)
+    # Content is empty as file read was skipped
+    self.assertIsNone(page.markdown)
+    self.assertIsNone(page.content)

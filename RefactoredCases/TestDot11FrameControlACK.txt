@@ -1,0 +1,43 @@
+class TestDot11FrameControlACK(unittest.TestCase):
+    def setUp(self):
+        # 802.11 Control Frame ACK
+        self.frame_orig = b'\xd4\x00\x00\x00\x00\x08\x54\xac\x2f\x85\xb7\x7f\xc3\x9e'
+        self.d = Dot11(self.frame_orig)
+        self.ack = Dot11ControlFrameACK(self.d.get_body_as_string())
+
+    def test_frame_type_and_subtype(self):
+        # Test to ensure the frame type and subtype are correct
+        type = self.d.get_type()
+        self.assertEqual(type, Dot11Types.DOT11_TYPE_CONTROL)
+
+        subtype = self.d.get_subtype()
+        self.assertEqual(subtype, Dot11Types.DOT11_SUBTYPE_CONTROL_ACKNOWLEDGMENT)
+
+        typesubtype = self.d.get_type_n_subtype()
+        self.assertEqual(typesubtype, Dot11Types.DOT11_TYPE_CONTROL_SUBTYPE_ACKNOWLEDGMENT)
+
+    def test_01_HeaderTailSize(self):
+        # Test Header and Tail Size field
+        self.assertEqual(self.ack.get_header_size(), 8)
+        self.assertEqual(self.ack.get_tail_size(), 0)
+
+    def test_ack_contains(self):
+        # Test if the original data contains the ACK frame
+        self.assertIsNone(self.d.contains(self.ack))
+
+    def test_02_Duration(self):
+        'Test Duration field'
+
+        self.assertEqual(self.ack.get_duration(), 0)
+        self.ack.set_duration(0x1234)
+        self.assertEqual(self.ack.get_duration(), 0x1234)
+
+    def test_03_RA(self):
+        'Test RA field'
+
+        ra = self.ack.get_ra()
+        self.assertEqual(ra.tolist(), [0x00, 0x08, 0x54, 0xac, 0x2f, 0x85])
+        ra[0] = 0x12
+        ra[5] = 0x34
+        self.ack.set_ra(ra)
+        self.assertEqual(self.ack.get_ra().tolist(), [0x12, 0x08, 0x54, 0xac, 0x2f, 0x34])

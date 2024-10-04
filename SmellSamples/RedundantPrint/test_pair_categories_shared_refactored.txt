@@ -1,0 +1,14 @@
+def test_pair_categories_shared(self):
+    data = [("a", "a"), ("b", "c")]
+    df = pd.DataFrame(data, columns=["x1", "x2"]).assign(y=1)
+    m = MockMark()
+    p = Plot(df, y="y").pair(x=["x1", "x2"]).add(m).share(x=True).plot()
+    for ax in p._figure.axes:
+        assert ax.get_xticks() == [0, 1, 2]
+    # Assuming you want to check the entire structure of m.passed_data
+    expected_data = [
+        {"x": pd.Series([0., 1.], index=[0, 1])},
+        {"x": pd.Series([0., 2.], index=[0, 1])}
+    ]
+    for i, expected in enumerate(expected_data):
+        assert_vector_equal(m.passed_data[i]["x"], expected["x"])

@@ -1,0 +1,6 @@
+{
+  "EmptyTest": {
+    "Definition": "A test case does not contain a single executable statement.",
+    "Steps": "1. Comment out the test case: Directly use # to comment out the test case that does not contain a single executable statement, e.g., the functions that only have a pass."
+  }
+}

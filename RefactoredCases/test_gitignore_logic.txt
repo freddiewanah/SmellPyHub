@@ -1,0 +1,44 @@
+@pytest.mark.parametrize(
+    "test_directory, gitignore_rules, expected_files",
+    [
+        (
+                "include_exclude_tests",
+                ["exclude/", ".definitely_exclude"],
+                ["b/dont_exclude/a.py", "b/dont_exclude/a.pyi"],
+        ),
+        (
+                "nested_gitignore_tests",
+                None,
+                ["x.py", "root/b.py", "root/c.py", "root/child/c.py"],
+        ),
+    ],
+)
+def test_gitignore_logic(test_directory, gitignore_rules, expected_files):
+    path = THIS_DIR / "data" / test_directory
+    include = re.compile(r"\.pyi?$")
+    exclude = re.compile(r"")
+    report = Report()
+
+    gitignore = None
+    if gitignore_rules is not None:
+        gitignore = PathSpec.from_lines("gitwildmatch", gitignore_rules)
+    else:
+        gitignore = black.files.get_gitignore(path)
+
+    expected = [Path(path / file) for file in expected_files]
+    this_abs = THIS_DIR.resolve()
+    sources = list(
+        black.gen_python_files(
+            path.iterdir(),
+            this_abs,
+            include,
+            exclude,
+            None,
+            None,
+            report,
+            {path: gitignore} if gitignore else {},
+            verbose=False,
+            quiet=False,
+        )
+    )
+    assert sorted(expected) == sorted(sources)

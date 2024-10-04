@@ -1,0 +1,11 @@
+    def test_numpy_array_d1_datetime64_picoseconds(self):
+        # Test that orjson.dumps raises a TypeError for various datetime64 precision levels
+        with pytest.raises(TypeError, match="unsupported numpy.datetime64 unit: picoseconds"):
+            orjson.dumps(
+                numpy.array([
+                    numpy.datetime64("2021-01-01T00:00:00"),
+                    numpy.datetime64("2021-01-01T00:00:00.172"),
+                    numpy.datetime64("2021-01-01T00:00:00.567891234567"),
+                ]),
+                option=orjson.OPT_SERIALIZE_NUMPY
+            )

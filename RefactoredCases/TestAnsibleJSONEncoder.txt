@@ -1,0 +1,43 @@
+class TestAnsibleJSONEncoder:
+    """
+    Namespace for testing AnsibleJSONEncoder.
+    """
+
+    @pytest.fixture(scope='class')
+    def mapping(self, request):
+        """
+        Returns object of Mapping mock class.
+
+        The object is used for testing handling of Mapping objects
+        in AnsibleJSONEncoder.default().
+        Using a plain dictionary instead is not suitable because
+        it is handled by default encoder of the superclass (json.JSONEncoder).
+        """
+
+        class M(Mapping):
+            """Mock mapping class."""
+
+            def __init__(self, *args, **kwargs):
+                self.__dict__.update(*args, **kwargs)
+
+            def __getitem__(self, key):
+                return self.__dict__[key]
+
+            def __iter__(self):
+                return iter(self.__dict__)
+
+            def __len__(self):
+                return len(self.__dict__)
+
+        return M(request.param)
+
+    @pytest.fixture
+    def ansible_json_encoder(self):
+        """Return AnsibleJSONEncoder object."""
+        return AnsibleJSONEncoder()
+
+    def test_mapping_len(self, mapping):
+        """
+        Test that the __len__ method of the mapping fixture returns an integer.
+        """
+        assert isinstance(len(mapping), int), "Length of mapping should be an integer"

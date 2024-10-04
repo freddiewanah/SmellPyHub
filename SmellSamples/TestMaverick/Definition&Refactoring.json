@@ -1,0 +1,6 @@
+{
+  "TestMaverick": {
+    "Definition": "A test suite contains at least one test case that does not use a single field from the SetUp() method.",
+    "Steps": "1. Understand the purpose of the test case: For each such test case, understand what functionality it is testing and why it does not use any fields from the setUp() method. 2. Modify the test case or setUp method: If the test case should be using fields from the setUp method, modify it to do so. If the test case is correctly not using the setUp method because it needs different setup conditions, consider extracting it to a different test suite or modifying the setUp method to accommodate it."
+  }
+}

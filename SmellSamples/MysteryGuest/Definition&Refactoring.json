@@ -1,0 +1,6 @@
+{
+  "MysteryGuest": {
+    "Definition": "A test method containing object instances of files and databases classes",
+    "Steps": "1. Replace external resources with mocks or stubs: If possible, replace the external resource with a mock or stub. This makes the test more self-contained and predictable, as it no longer depends on the state of the external resource. 2. Isolate the test from the external resource: If it's not possible to replace the external resource, isolate the test from changes in the resource. For example, if the test reads from a file, ensure the file is reset to a known state before each test."
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "AssertinFixture":{
+    "Definition": "A test suite contains an assertion statement in its @pytest.fixture or setUp() method.",
+    "Steps": "1. Understand the purpose of the assertion: For each assertion in the fixture or setUp() method, understand why it is there. 2. Move the assertion to the test method: Create a new test method named test_setup and move the assertion to this method. 3. Remove the assertion:Remove the assertion in the fixture or setUp() method."
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "IgnoredTest": {
+    "Definition": "A test case contains the @unittest.skip or @pytest.mark.skip decorator.",
+    "Steps": "1. Address valid reasons for skipping: If a test is being skipped for a valid reason, consider to add a comment to the test case that explains why it is being skipped, and comment out the entire ignored test case during testing. 2. Comment ALL  code block: If the test should remain skipped and there's no immediate plan to enable it, you MUST add # in front of each line of the code including the annotation and function def to remove the entire code block during the testing, comment out the ENTIRE test body to make it clear that it's intentionally inactive."
+  }
+}

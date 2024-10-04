@@ -1,0 +1,2 @@
+def test_for_coverage():
+    assert mod.callback() is None

@@ -1,0 +1,6 @@
+{
+  "SuboptimalAssert": {
+    "Definition": "A test case contains an assertion statement that contains assertions that can be replaced with more specific assertions, such as use assertTrue(a==b) instead of assertEqual(a,b) or use assertTrue(a>b) instead of assertGreater(a,b).",
+    "Steps": "1. Replace the assertion with a more specific assertion: Replace each assertion with a more specific assertion that clearly indicates what the assertion is testing. For example, if using unittest library replace assertEqual(a,b) with assertTrue(a==b) or assertGreater(a,b) with assertTrue(a>b). If it's pytest then refactor the redundant part such as is True or is False"
+  }
+}

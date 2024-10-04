@@ -1,0 +1,72 @@
+@mock.patch('requests.get')
+@mock.patch('requests.post')
+def test_plugin_pushed_edge_cases(mock_post, mock_get):
+    """
+    NotifyPushed() Edge Cases
+
+    """
+
+    # Chat ID
+    recipients = '@ABCDEFG, @DEFGHIJ, #channel, #channel2'
+
+    # Some required input
+    app_key = 'ABCDEFG'
+    app_secret = 'ABCDEFG'
+
+    # Prepare Mock
+    mock_get.return_value = requests.Request()
+    mock_post.return_value = requests.Request()
+    mock_post.return_value.status_code = requests.codes.ok
+    mock_get.return_value.status_code = requests.codes.ok
+
+    # No application Key specified
+    with pytest.raises(TypeError):
+        NotifyPushed(
+            app_key=None,
+            app_secret=app_secret,
+            recipients=None,
+        )
+
+    with pytest.raises(TypeError):
+        NotifyPushed(
+            app_key="  ",
+            app_secret=app_secret,
+            recipients=None,
+        )
+    # No application Secret specified
+    with pytest.raises(TypeError):
+        NotifyPushed(
+            app_key=app_key,
+            app_secret=None,
+            recipients=None,
+        )
+
+    with pytest.raises(TypeError):
+        NotifyPushed(
+            app_key=app_key,
+            app_secret="   ",
+        )
+
+    # recipients list set to (None) is perfectly fine; in this case it will
+    # notify the App
+    obj = NotifyPushed(
+        app_key=app_key,
+        app_secret=app_secret,
+        recipients=None,
+    )
+    assert isinstance(obj, NotifyPushed) is True
+    assert len(obj.channels) == 0
+    assert len(obj.users) == 0
+
+    obj = NotifyPushed(
+        app_key=app_key,
+        app_secret=app_secret,
+        targets=recipients,
+    )
+    assert isinstance(obj, NotifyPushed) is True
+    assert len(obj.channels) == 2
+    assert len(obj.users) == 2
+
+    # Prepare Mock to fail
+    mock_post.return_value.status_code = requests.codes.internal_server_error
+    mock_get.return_value.status_code = requests.codes.internal_server_error

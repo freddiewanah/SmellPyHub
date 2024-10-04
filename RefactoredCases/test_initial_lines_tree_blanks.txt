@@ -1,0 +1,24 @@
+# Separate test suite for tests that do not depend on setUp configuration
+class TestBlankLinesBasic(BlankLinesTestCase):
+    """
+    Basic tests for blank_lines that do not require specific configuration.
+    """
+    def test_initial_lines_one_blanks(self):
+        """
+        It will accept less than 3 blank lines before the first line of actual code.
+        """
+        result = errors_from_src("""
+        def some_function():
+            pass
+        """)
+        self.assertNoErrors(result)
+
+    def test_initial_lines_tree_blanks(self):
+        """
+        It will accept 3 blank lines before the first line of actual code, as normal.
+        """
+        result = errors_from_src("""
+        def some_function():
+            pass
+        """)
+        self.assertNoErrors(result)

@@ -1,0 +1,11 @@
+class ValidateTestWithoutSchema(unittest.TestCase):
+    def test_empty_config_no_schemas(self):
+        conf, errors = config._validate({}, [])
+        assert {} == conf
+        assert {} == errors
+
+    def test_config_no_schemas(self):
+        raw_config = {"foo": {"bar": "baz"}}
+        conf, errors = config._validate(raw_config, [])
+        assert {} == conf
+        assert {} == errors

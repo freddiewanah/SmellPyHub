@@ -1,0 +1,166 @@
+def test_apprise_config_with_apprise_obj(tmpdir):
+    """
+    API: ConfigBase - parse valid config
+
+    """
+
+    # temporary file to work with
+    t = tmpdir.mkdir("apprise-obj").join("apprise")
+    buf = """
+    good://hostname
+    localhost=good://localhost
+    """
+    t.write(buf)
+
+    # Define our good:// url
+    class GoodNotification(NotifyBase):
+        def __init__(self, **kwargs):
+            super().__init__(
+                notify_format=NotifyFormat.HTML, **kwargs)
+
+        def notify(self, **kwargs):
+            # Pretend everything is okay
+            return True
+
+        def url(self, **kwargs):
+            # support url()
+            return ''
+
+    # Store our good notification in our schema map
+    N_MGR._schema_map['good'] = GoodNotification
+
+    # Create ourselves a config object
+    ac = AppriseConfig(cache=False)
+
+    # Nothing loaded yet
+    assert len(ac) == 0
+
+    # Add an item associated with tag a
+    assert ac.add(configs=str(t), asset=AppriseAsset(), tag='a')
+
+    # One configuration file
+    assert len(ac) == 1
+
+    # 2 services found in it
+    assert len(ac.servers()) == 2
+
+    # Pop one of them (at index 0)
+    ac.server_pop(0)
+
+    # Verify that it no longer listed
+    assert len(ac.servers()) == 1
+
+    # Test our ability to add Config objects to our apprise object
+    a = Apprise()
+
+    # Add our configuration object
+    assert a.add(servers=ac)
+
+    # Detect our 1 entry (originally there were 2 but we deleted one)
+    assert len(a) == 1
+
+    # Notify our service
+    assert a.notify(body='apprise configuration power!')
+
+    # Add our configuration object
+    assert a.add(
+        servers=[AppriseConfig(str(t)), AppriseConfig(str(t))])
+
+    # Detect our 5 loaded entries now; 1 from first config, and another
+    # 2x2 based on adding our list above
+    assert len(a) == 5
+
+    # We can't add garbage
+    assert not a.add(servers=object())
+    assert not a.add(servers=[object(), object()])
+
+    # Our length is unchanged
+    assert len(a) == 5
+
+    # reference index 0 of our list
+    ref = a[0]
+    assert isinstance(ref, NotifyBase)
+
+    # Our length is unchanged
+    assert len(a) == 5
+
+    # pop the index
+    ref_popped = a.pop(0)
+
+    # Verify our response
+    assert isinstance(ref_popped, NotifyBase)
+
+    # Our length drops by 1
+    assert len(a) == 4
+
+    # Content popped is the same as one referenced by index
+    # earlier
+    assert ref == ref_popped
+
+    # pop an index out of range
+    with pytest.raises(IndexError):
+        a.pop(len(a))
+
+    # Our length remains unchanged
+    assert len(a) == 4
+
+    with pytest.raises(IndexError):
+        a[len(a)]
+    # Reference content out of range
+
+    # reference index at the end of our list
+    ref = a[len(a) - 1]
+
+    # Verify our response
+    assert isinstance(ref, NotifyBase)
+
+    # Our length stays the same
+    assert len(a) == 4
+
+    # We can pop from the back of the list without a problem too
+    ref_popped = a.pop(len(a) - 1)
+
+    # Verify our response
+    assert isinstance(ref_popped, NotifyBase)
+
+    # Content popped is the same as one referenced by index
+    # earlier
+    assert ref == ref_popped
+
+    # Our length drops by 1
+    assert len(a) == 3
+
+    # Now we'll test adding another element to the list so that it mixes up
+    # our response object.
+    # Below we add 3 different types, a ConfigBase, NotifyBase, and URL
+    assert a.add(
+        servers=[
+            ConfigFile(path=(str(t))),
+            'good://another.host',
+            GoodNotification(**{'host': 'nuxref.com'})])
+
+    # Our length increases by 4 (2 entries in the config file, + 2 others)
+    assert len(a) == 7
+
+    # reference index at the end of our list
+    ref = a[len(a) - 1]
+
+    # Verify our response
+    assert isinstance(ref, NotifyBase)
+
+    # We can pop from the back of the list without a problem too
+    ref_popped = a.pop(len(a) - 1)
+
+    # Verify our response
+    assert isinstance(ref_popped, NotifyBase)
+
+    # Content popped is the same as one referenced by index
+    # earlier
+    assert ref == ref_popped
+
+    # Our length drops by 1
+    assert len(a) == 6
+
+    # pop our list
+    while len(a) > 0:
+        assert isinstance(a.pop(len(a) - 1), NotifyBase)

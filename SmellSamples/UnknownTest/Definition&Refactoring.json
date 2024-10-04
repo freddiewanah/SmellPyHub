@@ -1,0 +1,6 @@
+{
+  "UnknownTest": {
+    "Definition": "A test case does not contain a single assertion statement.",
+    "Steps": "1. Understand the purpose of the test method: For each such test method, understand what it is intended to test. 2. Add appropriate assertions: Add assertions to the test methods. ONLY add assertTrue/assert or assertFalse/assert not or assertIsNone/assert xxx is None to the existing functions in the test method. DO NOT assert new function calls as you don't know their type and definition. 3. Ignore the test method: If the test method is not needed at this time, consider adding the @unittest.skip or @pytest.mark.skip decorator to it."
+  }
+}

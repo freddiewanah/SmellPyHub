@@ -1,0 +1,6 @@
+{
+  "ResourceOptimism": {
+    "Definition": "A test method utilizes an instance of a File class without calling the exists(), isFile() or notExists() methods of the object",
+    "Steps": "1. Add assertions: Add assertions to the test method that verify the existence or non-existence of the file."
+  }
+}

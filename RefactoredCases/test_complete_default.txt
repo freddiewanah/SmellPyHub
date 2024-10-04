@@ -1,0 +1,13 @@
+def test_complete_default(self):
+    """ Test complete_default(self, text, line, startidx, endidx) """
+    sfcli = SpiderFootCli()
+
+    # Test the first complete_default call
+    default = sfcli.complete_default("", "-t -m", None, None)
+    self.assertIsInstance(default, list)
+    # Removed the redundant assertion self.assertEqual('TBD', 'TBD')
+
+    # Test the second complete_default call
+    default = sfcli.complete_default("", "-m -t", None, None)
+    self.assertIsInstance(default, list)
+    # Removed the redundant assertion self.assertEqual('TBD', 'TBD')

@@ -1,0 +1,6 @@
+{
+  "ObscureInLineSetup": {
+    "Definition": "A test case contains ten or more local variables declarations.",
+    "Steps": "1. Understand the purpose of each variable: For each variable, understand what part of the functionality it is testing. 2. Group variables by functionality: Group variables that test the same functionality. 3. Extract functionality into a separate test case: For each group of variables, extract to separated methods. Or breakdown the test case into several small test cases."
+  }
+}

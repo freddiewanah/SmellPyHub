@@ -1,0 +1,37 @@
+def test_component_functions_integer(self):
+    """
+    Test preprocessing, postprocessing, and configuration retrieval of gr.Number.
+    """
+    numeric_input = gr.Number(precision=0, value=42)
+
+    # Testing preprocessing with different inputs
+    assert numeric_input.preprocess(3) == 3
+    assert numeric_input.preprocess(None) is None
+
+    # Testing postprocessing with different inputs
+    assert numeric_input.postprocess(3) == 3
+    assert numeric_input.postprocess(2.85) == 3
+    assert numeric_input.postprocess(None) is None
+
+    # Testing get_config functionality
+    expected_config = {
+        "value": 42,
+        "name": "number",
+        "show_label": True,
+        "step": 1,
+        "label": None,
+        "minimum": None,
+        "maximum": None,
+        "container": True,
+        "min_width": 160,
+        "scale": None,
+        "elem_id": None,
+        "elem_classes": [],
+        "visible": True,
+        "interactive": None,
+        "proxy_url": None,
+        "info": None,
+        "precision": 0,
+        "_selectable": False,
+    }
+

@@ -1,0 +1,25 @@
+@mock.patch("sys.argv")
+def test_missing_required_argument_default_prog(self, exit_mock, argv_mock):
+    argv_mock.__getitem__.return_value = "/usr/bin/foo"
+    cmd = commands.Command()
+    cmd.add_argument("--bar", required=True)
+
+    with pytest.raises(SystemExit):
+        cmd.parse([])
+
+    exit_mock.assert_called_once_with(
+        mock.ANY, mock.ANY, "usage: foo --bar BAR"
+    )
+
+@mock.patch("sys.argv")
+def test_missing_required_argument_custom_prog(self, exit_mock, argv_mock):
+    argv_mock.__getitem__.return_value = "/usr/bin/foo"
+    cmd = commands.Command()
+    cmd.add_argument("--bar", required=True)
+
+    with pytest.raises(SystemExit):
+        cmd.parse([], prog="baz")
+
+    exit_mock.assert_called_once_with(
+        mock.ANY, mock.ANY, "usage: baz --bar BAR"
+    )

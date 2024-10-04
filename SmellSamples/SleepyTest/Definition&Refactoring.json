@@ -1,0 +1,7 @@
+{
+  "SleepyTest": {
+    "Definition": "A test case invokes the time.sleep() function with no comment.",
+    "Steps": "1. Understand the purpose of the sleep: For each such test method, understand why the sleep is being used. 2. Replace the sleep with a asyncio.sleep: If the sleep is being used to wait for a certain condition, consider replacing it with asyncio.sleep. 3. Reduce the sleep duration: reduce the sleep duration by decrease the sleep time. 4. Add a comment: If the sleep is being used to wait for a certain condition, add a comment to the test case that explains what condition is being waited for and why."
+
+  }
+}

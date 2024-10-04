@@ -1,0 +1,34 @@
+drmaa
+testwrap.py ::: Submit
+testwrap.py ::: JobTemplateTests
+
+
+
+jedi
+test_full_name.py ::: TestFullNameWithGotoDefinitions
+test_full_name.py ::: TestFullDefinedName
+test_utils.py ::: TestSetupReadline
+
+
+
+spotipy
+test_user_endpoints.py ::: SpotipyLibraryApiTests
+test_user_endpoints.py ::: SpotipyImplicitGrantTests
+test_user_endpoints.py ::: SpotifyPKCETests
+test_non_user_endpoints.py ::: AuthTestSpotipy
+
+
+
+steamodd
+testapps.py ::: AppsTestCase
+testitems.py ::: ItemTestCase
+
+
+
+vhs-teletext
+test_mp.py ::: TestMPSingle
+test_elements.py ::: TestElement
+test_spellcheck.py ::: TestSpellCheck
+
+
+
